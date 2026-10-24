@@ -1,0 +1,72 @@
+{
+  "project": {
+    "title": "Employee Management Portal",
+    "description": "Build a responsive employee management portal with employee profiles, attendance tracking, leave applications, HR administration and reports. It needs a web UI and API integration.",
+    "startDate": "2026-10-26",
+    "targetDeadline": "2026-11-20",
+    "workingDaysPerWeek": 5,
+    "hoursPerWorkday": 6
+  },
+  "teamMembers": [
+    {
+      "id": "u1",
+      "name": "Aarav",
+      "role": "Frontend Developer",
+      "skills": [
+        {
+          "name": "React",
+          "level": "advanced"
+        },
+        {
+          "name": "UI/UX",
+          "level": 3
+        }
+      ],
+      "hoursPerDay": 4,
+      "weeklyCapacityHours": 20,
+      "currentLoadHours": 3,
+      "preferences": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "u2",
+      "name": "Diya",
+      "role": "Backend Developer",
+      "skills": [
+        {
+          "name": "Node.js",
+          "level": 4
+        },
+        {
+          "name": "MongoDB",
+          "level": 3
+        },
+        {
+          "name": "API",
+          "level": 3
+        }
+      ],
+      "hoursPerDay": 5,
+      "weeklyCapacityHours": 25,
+      "currentLoadHours": 2
+    },
+    {
+      "id": "u3",
+      "name": "Kabir",
+      "role": "QA",
+      "skills": [
+        "Testing",
+        "Documentation"
+      ],
+      "hoursPerDay": 3,
+      "weeklyCapacityHours": 15,
+      "currentLoadHours": 0
+    }
+  ],
+  "options": {
+    "maxTasks": 8,
+    "contingencyPercent": 15,
+    "includeUnassigned": false
+  }
+}
