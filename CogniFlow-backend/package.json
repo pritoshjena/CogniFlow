@@ -1,0 +1,32 @@
+{
+  "name": "cogniflow-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CogniFlow API: Express + MongoDB (Mongoose) + Socket.IO real-time, with a proxy to the Python AI recommender.",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/seed.js",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.7.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.3",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.24.7",
+    "socket.io": "^4.8.4",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
+  }
+}

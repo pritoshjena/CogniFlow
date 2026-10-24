@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CogniFlow – Log in, Create account, Profile</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--ink:#0f1f3d;--mut:#5b6b85;--line:#e3eaf3;--blue:#1d5fe0;--grad:linear-gradient(90deg,#1d6fe0,#0e8fa3);--red:#d92d20;--amber:#b7791f;--green:#0f9d76;--track:#e8eef6;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;color:var(--ink);font-size:15px;background:linear-gradient(100deg,#e4f1fc 0%,#f4f9fd 45%,#e6f6ee 100%) fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.hide{display:none!important}
+.wrap{max-width:1615px;margin:0 auto}
+header.top{background:#fff;border-bottom:1px solid var(--line);padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:22px;color:var(--blue)}
+.logo i{width:30px;height:30px;border-radius:8px;background:var(--grad);display:grid;place-items:center}
+.logo svg{width:18px;height:18px}
+.proj{color:var(--mut);font-size:14px;margin-left:14px;padding-left:14px;border-left:1px solid var(--line)}
+.right{display:flex;align-items:center;gap:14px}
+.user{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:99px;padding:6px 16px 6px 6px;background:#fff;cursor:pointer;box-shadow:0 2px 8px #0f1f3d12;text-align:left}
+.user b{display:block;font-size:14px;line-height:1.15}.user small{color:var(--mut);font-size:12px}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:10.5px;font-weight:700;flex:none}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.14em;color:var(--blue);font-weight:500;text-transform:uppercase}
+h1.pt{font-size:40px;margin:6px 0 8px;letter-spacing:-.02em;font-weight:800}
+.lead{color:var(--mut);margin:0;line-height:1.55}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 26px;box-shadow:0 10px 30px -16px #1d4ed833}
+.card h3{margin:0 0 6px;font-size:20px;font-weight:600;padding-left:14px;position:relative}
+.card h3:before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:4px;border-radius:4px;background:var(--blue)}
+.card .hint{color:var(--mut);margin:0 0 18px 14px;font-size:14px}
+.btn{border:0;border-radius:11px;padding:13px 18px;font-weight:700;cursor:pointer;background:var(--grad);color:#fff;width:100%}
+.btn:hover{filter:brightness(1.07)}.btn.sm{width:auto;padding:11px 16px;font-size:14px}
+.btn.out{background:#fff;color:var(--blue);border:1px solid var(--line)}
+label,.lb{display:block;font-weight:600;font-size:13.5px;margin:0 0 6px}
+.lb small,label small{font-weight:400;color:var(--mut)}
+.field{margin-bottom:16px}
+.inp{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.inp:focus{border-color:var(--blue)}.inp.bad{border-color:var(--red)}
+textarea.inp{resize:vertical;min-height:84px}
+.err{color:var(--red);font-size:13px;margin-top:6px}
+.dash{color:var(--mut)}
+.link{color:var(--blue);font-weight:600;cursor:pointer;background:none;border:0;padding:0}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#f2f7fc;border:1px solid var(--line);border-radius:12px;padding:4px}
+.seg button{border:0;background:none;padding:10px;border-radius:9px;cursor:pointer;font-weight:600;color:var(--mut)}
+.seg button[aria-pressed=true]{background:var(--grad);color:#fff}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--blue);font-weight:600;cursor:pointer;padding:6px 8px;font-size:13px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin:2px 0 18px;font-size:13.5px;color:var(--mut)}
+.chk{display:flex;gap:8px;align-items:center;font-weight:500;margin:0}
+.demo{margin-top:18px;text-align:center;font-size:14px;color:var(--mut)}
+
+/* auth */
+.lgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:center;padding:64px 28px}
+.lgrid h1{font-size:48px;line-height:1.08;margin:8px 0 14px;font-weight:800;letter-spacing:-.025em;max-width:520px}
+.ruler{margin-top:34px;max-width:520px}
+.bars{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:8px;margin:6px 0 12px}
+.bars span{height:12px;border-radius:99px;background:var(--track);overflow:hidden}
+.bars span b{display:block;height:100%;width:0;background:linear-gradient(90deg,#b7791f,#e8b53c)}
+.bars span:first-child b{width:38%}
+.fcard{max-width:440px;width:100%;justify-self:center}
+.fcard h2{margin:0 0 6px;font-size:28px;letter-spacing:-.01em}
+.fcard form>.lead{margin-bottom:20px}
+.sgrid{max-width:900px;margin:0 auto;padding:36px 28px 60px}
+.sgrid .card{margin-bottom:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.str{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}
+.str i{height:5px;border-radius:9px;background:var(--track)}
+.rng{display:flex;align-items:center;gap:14px}.rng input{flex:1;accent-color:#1d6fe0}.rng output{font-family:"IBM Plex Mono",monospace;min-width:70px;text-align:right}
+
+/* skills */
+.grp{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:16px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;cursor:pointer;font-size:14px;font-weight:500;color:var(--mut)}
+.chip:hover{border-color:#bcd3fa}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.picked{margin-top:20px;background:#f5f9fd;border:1px solid var(--line);border-radius:16px;padding:6px 16px}
+.picked .empty{padding:14px 0;color:var(--mut)}
+.sk{display:grid;grid-template-columns:150px 1fr 190px 28px;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.sk:last-child{border:0}
+.sk .name{font-weight:500}
+.bar{height:10px;border-radius:99px;background:var(--track);overflow:hidden}
+.bar b{display:block;height:100%;border-radius:99px}
+.lvs{display:flex;gap:4px}
+.lvs button{flex:1;height:32px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--mut)}
+.lvs button[aria-pressed=true]{color:#fff;border-color:transparent}
+.lvl{font-family:"IBM Plex Mono",monospace;font-size:13px;text-align:right}
+.x{border:0;background:none;color:var(--mut);font-size:18px;cursor:pointer;line-height:1}
+.custom{display:grid;grid-template-columns:1.3fr 1fr auto;gap:10px;margin-top:18px;align-items:end}
+.custom .field{margin:0}
+
+/* app */
+.shell{display:grid;grid-template-columns:250px 1fr;gap:34px;padding:26px 28px}
+nav{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;align-self:start;box-shadow:0 10px 30px -16px #1d4ed833}
+nav a{display:flex;justify-content:space-between;padding:12px 14px;border-radius:11px;color:var(--ink);font-weight:500;text-decoration:none;margin-bottom:3px;cursor:pointer}
+nav a.on{background:var(--grad);color:#fff;font-weight:600}
+nav em{font-style:normal;background:#fde4e1;color:var(--red);border-radius:99px;font-size:12px;padding:1px 9px}
+nav hr{border:0;border-top:1px solid var(--line);margin:8px 6px}
+.cols{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start}
+.mem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid transparent;background:none;border-radius:14px;padding:10px;cursor:pointer;margin-bottom:4px}
+.mem:hover{background:#f3f8fd}
+.mem[aria-pressed=true]{background:#eaf2fe;border-color:#bcd3fa}
+.mem .av{width:38px;height:38px;font-size:12px}
+.mem b{display:block;font-weight:600}.mem small{color:var(--mut);font-size:13px}
+.mem .n{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--mut);white-space:nowrap}
+.prof{display:flex;align-items:center;gap:16px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.prof .av{width:60px;height:60px;font-size:18px}
+.prof h2{margin:0;font-size:26px}
+.stat{margin-left:auto;display:flex;gap:26px;text-align:right}
+.stat b{display:block;font-size:22px}.stat small{color:var(--mut);font-size:12.5px}
+.det{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 20px;margin-bottom:6px}
+.det small{display:block;color:var(--mut);font-size:12.5px;margin-bottom:2px}.det b{font-weight:600;word-break:break-word}
+.bio{background:#f5f9fd;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:16px;line-height:1.55}
+.sect{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.sect h4{margin:0 0 4px;font-size:17px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;z-index:9;max-width:90vw}
+@media (max-width:1000px){
+ .lgrid{grid-template-columns:1fr;gap:32px;padding:32px 20px}.lgrid h1{font-size:34px}
+ .shell{grid-template-columns:1fr;padding:18px}nav{display:flex;overflow-x:auto;gap:4px}nav a{white-space:nowrap}nav hr{display:none}
+ .cols{grid-template-columns:1fr}.proj{display:none}.two,.det{grid-template-columns:1fr}.custom{grid-template-columns:1fr}
+ .sk{grid-template-columns:1fr auto;gap:8px 12px}.sk .bar{grid-column:1/-1;order:3}.stat{margin-left:0}.sgrid{padding:20px 16px 40px}
+ header.top{padding:12px 16px}.user small{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOG IN -->
+<section id="login">
+  <header class="top"><div style="display:flex;align-items:center"><div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h6V9h10"/><path d="M16 5l4 4-4 4"/></svg></i>CogniFlow</div></div></header>
+  <div class="wrap lgrid">
+    <div>
+      <div class="eyebrow">Project workspace</div>
+      <h1>Detect schedule risk before it becomes a delay.</h1>
+      <p class="lead" style="max-width:480px">CogniFlow assigns work based on verified skills and availability, and flags at-risk deadlines early enough for the team to take corrective action.</p>
+      <div class="card ruler" aria-hidden="true">
+        <h3>Delivery tracker</h3><p class="hint">Design and setup</p>
+        <div class="bars"><span><b></b></span><span><b></b></span><span><b></b></span></div>
+        <div class="mono dash" style="font-size:13px">28 Oct · 38% done</div>
+        <div style="color:var(--amber);font-weight:500;font-size:14px;margin-top:4px">At risk · Resource overallocation</div>
+      </div>
+    </div>
+    <div class="card fcard">
+      <form id="lf" novalidate>
+        <h2>Sign in</h2>
+        <p class="lead">Sign in to access your project workspace.</p>
+        <div class="field"><label for="lem">Email</label><input class="inp" id="lem" type="email" autocomplete="email" placeholder="name@company.com"><div class="err" id="e_lem"></div></div>
+        <div class="field"><label for="lpw">Password</label><div class="pw"><input class="inp" id="lpw" type="password" autocomplete="current-password" placeholder="Your password"><button type="button" data-tg="lpw">Show</button></div><div class="err" id="e_lpw"></div></div>
+        <div class="meta"><label class="chk"><input type="checkbox" checked> Remember this device</label><button type="button" class="link" id="fg">Forgot password?</button></div>
+        <button class="btn" type="submit">Sign in</button>
+                <div class="demo">Not registered? <button type="button" class="link" data-go="signup">Create an account</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CREATE ACCOUNT -->
+<section id="signup" class="hide">
+  <header class="top"><div style="display:flex;align-items:center"><div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h6V9h10"/><path d="M16 5l4 4-4 4"/></svg></i>CogniFlow</div></div><button class="link" data-go="login">Already registered? Sign in</button></header>
+  <form class="sgrid" id="sf" novalidate>
+    <div style="margin-bottom:22px"><div class="eyebrow">Project workspace</div><h1 class="pt">Create your account</h1><p class="lead">Provide your details and skills. This information is used to recommend suitable task assignments.</p></div>
+
+    <div class="card">
+      <h3>Account details</h3><p class="hint">Your email address is used to sign in.</p>
+      <div class="two">
+        <div class="field"><label for="nm">Full name</label><input class="inp" id="nm" autocomplete="name" placeholder="e.g. Ananya Iyer"><div class="err" id="e_nm"></div></div>
+        <div class="field"><label for="sem">Email</label><input class="inp" id="sem" type="email" autocomplete="email" placeholder="name@company.com"><div class="err" id="e_sem"></div></div>
+        <div class="field"><label for="spw">Password</label><div class="pw"><input class="inp" id="spw" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" data-tg="spw">Show</button></div><div class="str" id="str"><i></i><i></i><i></i><i></i></div><div class="dash" style="font-size:12.5px;margin-top:6px" id="strt">Use 8+ characters with a number and a capital letter.</div><div class="err" id="e_spw"></div></div>
+        <div class="field"><label for="spw2">Confirm password</label><div class="pw"><input class="inp" id="spw2" type="password" autocomplete="new-password" placeholder="Type it again"><button type="button" data-tg="spw2">Show</button></div><div class="err" id="e_spw2"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Your skills</h3><p class="hint">Select your skills and set a proficiency level for each. At least one skill is required.</p>
+      <div id="picker"></div>
+      <div class="custom">
+        <div class="field"><label for="csn">Add a skill not listed</label><input class="inp" id="csn" placeholder="e.g. Data analysis"></div>
+        <div class="field"><label for="csc">Category</label><select class="inp" id="csc"></select></div>
+        <button type="button" class="btn out sm" id="csa">Add skill</button>
+      </div>
+      <div class="err" id="e_csn"></div>
+      <div class="picked" id="picked" aria-live="polite"></div>
+      <div class="err" id="e_sk"></div>
+    </div>
+
+    <div class="card">
+      <label class="chk" style="font-weight:500"><input type="checkbox" id="tc"> I consent to sharing my profile and skills with my project team.</label>
+      <div class="err" id="e_tc"></div>
+      <div style="display:flex;gap:12px;margin-top:18px;flex-wrap:wrap"><button class="btn" type="submit" style="flex:1;min-width:200px">Create account</button><button type="button" class="btn out" data-go="login" style="width:auto">Cancel</button></div>
+    </div>
+  </form>
+</section>
+
+<!-- RESET PASSWORD -->
+<section id="reset" class="hide">
+  <header class="top"><div style="display:flex;align-items:center"><div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h6V9h10"/><path d="M16 5l4 4-4 4"/></svg></i>CogniFlow</div></div><button class="link" data-go="login">Back to sign in</button></header>
+  <div class="wrap" style="padding:64px 28px">
+    <div class="card fcard">
+      <form id="rf" novalidate>
+        <h2>Reset password</h2>
+        <p class="lead">Enter your account email and choose a new password.</p>
+        <div class="field"><label for="rem">Email</label><input class="inp" id="rem" type="email" autocomplete="email" placeholder="name@company.com"><div class="err" id="e_rem"></div></div>
+        <div class="field"><label for="rpw">New password</label><div class="pw"><input class="inp" id="rpw" type="password" autocomplete="new-password" placeholder="At least 8 characters"><button type="button" data-tg="rpw">Show</button></div><div class="err" id="e_rpw"></div></div>
+        <div class="field"><label for="rpw2">Confirm new password</label><div class="pw"><input class="inp" id="rpw2" type="password" autocomplete="new-password" placeholder="Type it again"><button type="button" data-tg="rpw2">Show</button></div><div class="err" id="e_rpw2"></div></div>
+        <button class="btn" type="submit">Update password</button>
+        <div class="demo"><button type="button" class="link" data-go="login">Cancel</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- APP: PROFILE -->
+<section id="app" class="hide">
+  <header class="top">
+    <div style="display:flex;align-items:center"><div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h6V9h10"/><path d="M16 5l4 4-4 4"/></svg></i>CogniFlow</div><span class="proj" id="pj"></span></div>
+    <div class="right"><button class="user" id="mepill"><span class="av" id="ua"></span><span><b id="un"></b><small id="ur"></small></span></button><button class="link" id="out">Sign out</button></div>
+  </header>
+  <div class="wrap shell">
+    <nav aria-label="Project">
+      <a data-na>Overview</a><a data-na>Assign work</a><a data-na>Team</a><a data-na>Board</a><a data-na>Workload</a><a data-na>Dependencies</a><a data-na>Contributions</a><a data-na>Risks <em>3</em></a><hr><a class="on" aria-current="page">Profile</a>
+    </nav>
+    <main>
+      <div style="margin-bottom:24px"><div class="eyebrow">Project workspace</div><h1 class="pt">Profile</h1><p class="lead" id="sub"></p></div>
+      <div class="cols">
+        <div class="card"><h3>Team members</h3><p class="hint">Select a member to view their profile.</p><div id="tinfo"></div><div id="mems"></div></div>
+        <div class="card" id="prof"></div>
+      </div>
+    </main>
+  </div>
+</section>
+<div class="toast hide" id="ts" role="status"></div>
+
+<script>
+var $=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var PAL=["#b4452d","#2f7d5b","#8a3fa0","#a06b12","#0e8a94","#c2417a","#3b5bdb","#d9480f"];
+var CATS=["Frontend","Backend","Design","Quality","Ops","Planning"];
+var CAT={"React":"Frontend","HTML & CSS":"Frontend","JavaScript":"Frontend","Flutter":"Frontend","Node.js":"Backend","Python":"Backend","Database":"Backend","APIs":"Backend","Notifications":"Backend","UI design":"Design","Figma":"Design","UX research":"Design","Testing":"Quality","Documentation":"Quality","DevOps":"Ops","Git":"Ops","Project planning":"Planning","Presenting":"Planning"};
+var LN=["","Learning","Working","Strong","Expert"],LC=["","#b7791f","#1d6fe0","#0e9aa7","#0f9d76"];
+var AUTH_KEY="CogniFlowAuthSession-v1";
+var authState={users:[],teams:[]};
+try{authState=JSON.parse(sessionStorage.getItem(AUTH_KEY)||"null")||authState}catch(e){}
+var users=authState.users||[],teams=authState.teams||[];
+function saveAuth(){try{sessionStorage.setItem(AUTH_KEY,JSON.stringify({users:users,teams:teams}))}catch(e){}}
+var me=null,sel=0,tt,ssk={},smode="create",plvl=2;
+
+function toast(m){var t=$("#ts");t.textContent=m;t.classList.remove("hide");clearTimeout(tt);tt=setTimeout(function(){t.classList.add("hide")},2800)}
+function show(id){["login","signup","reset","app"].forEach(function(s){$("#"+s).classList.toggle("hide",s!==id)});window.scrollTo(0,0)}
+function av(p){return '<span class="av" style="background:'+p.c+'">'+esc(p.i)+"</span>"}
+function err(id,m){var e=$("#e_"+id);if(e)e.textContent=m||"";var f=$("#"+id);if(f&&f.classList)f.classList.toggle("bad",!!m)}
+$$("[data-go]").forEach(function(b){b.onclick=function(){show(b.dataset.go)}});
+$$("[data-tg]").forEach(function(b){b.onclick=function(){var p=$("#"+b.dataset.tg),s=p.type==="password";p.type=s?"text":"password";b.textContent=s?"Hide":"Show"}});
+$$("[data-na]").forEach(function(a){a.onclick=function(){toast("This module is not included in the current release.")}});
+
+/* LOG IN */
+$("#fg").onclick=function(){$("#rem").value=$("#lem").value.trim();["rem","rpw","rpw2"].forEach(function(i){err(i)});show("reset")};
+$("#rf").onsubmit=function(e){
+  e.preventDefault();["rem","rpw","rpw2"].forEach(function(i){err(i)});
+  var em=$("#rem").value.trim().toLowerCase(),pw=$("#rpw").value,ok=true,u=null;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){err("rem","Enter a valid email address.");ok=false}
+  else{u=users.filter(function(x){return x.email===em})[0];if(!u){err("rem","No account found for this email address.");ok=false}}
+  if(pw.length<8||!/\d/.test(pw)||!/[A-Z]/.test(pw)){err("rpw","Use at least 8 characters, including a number and a capital letter.");ok=false}
+  if($("#rpw2").value!==pw){err("rpw2","Passwords do not match.");ok=false}
+  if(!ok)return;
+  u.pw=pw;saveAuth();$("#rf").reset();$("#lem").value=em;$("#lpw").value="";err("lem");err("lpw");show("login");toast("Password updated. Sign in with your new password.");
+};
+$("#lf").onsubmit=function(e){
+  e.preventDefault();var em=$("#lem").value.trim().toLowerCase(),pw=$("#lpw").value,ok=true;err("lem");err("lpw");
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){err("lem","Enter a valid email address, e.g. name@company.com.");ok=false}
+  if(!pw){err("lpw","Enter your password.");ok=false}
+  if(!ok)return;
+  var u=users.filter(function(x){return x.email===em})[0];
+  if(!u){err("lem","No account found for this email address.");return}
+  if(u.pw!==pw){err("lpw","Incorrect password. Try again or select Forgot password.");return}
+  enter(u);
+};
+function enter(u){
+  me=u;sel=members().indexOf(u);saveAuth();
+  var payload={type:"COGNIFLOW_AUTH_SUCCESS",user:{name:u.n,email:u.email,department:u.dept,skills:u.s||{},team:u.team,teamName:(teamOf(u)||{name:"My team"}).name}};
+  if(window.parent&&window.parent!==window){window.parent.postMessage(payload,window.location.origin);toast("Signed in successfully.");}
+  else{$("#pj").textContent=teamOf(u).name;$("#ua").textContent=u.i;$("#ua").style.background=u.c;$("#un").textContent=u.n;$("#ur").textContent=u.dept;show("app");render()}
+}
+$("#out").onclick=function(){$("#lpw").value="";show("login");toast("Signed out")};
+$("#mepill").onclick=function(){sel=members().indexOf(me);render()};
+
+/* CREATE ACCOUNT */
+function teamOf(u){return teams.filter(function(t){return t.code===u.team})[0]}
+function members(){return users.filter(function(x){return x.team===me.team})}
+function newCode(){var a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",c;do{c="";for(var i=0;i<6;i++)c+=a.charAt(Math.floor(Math.random()*a.length))}while(teams.some(function(t){return t.code===c}));return c}
+$("#spw").oninput=function(){
+  var v=this.value,sc=(v.length>=8)+(/[A-Z]/.test(v)&&/[a-z]/.test(v))+/\d/.test(v)+/[^A-Za-z0-9]/.test(v);if(!v)sc=0;
+  var col=["#e3eaf3","#d92d20","#b7791f","#0e9aa7","#0f9d76"][sc];
+  $$("#str i").forEach(function(i,k){i.style.background=k<sc?col:"#e8eef6"});
+  $("#strt").textContent=["Use 8+ characters with a number and a capital letter.","Weak","Fair","Good","Strong"][sc];
+};
+$("#csc").innerHTML=CATS.map(function(c){return "<option>"+c+"</option>"}).join("");
+function drawPicker(){
+  $("#picker").innerHTML=CATS.map(function(c){
+    var ks=Object.keys(CAT).filter(function(k){return CAT[k]===c});
+    return '<div class="grp">'+c+'</div><div class="chips">'+ks.map(function(k){return '<button type="button" class="chip" aria-pressed="'+(k in ssk)+'" data-k="'+esc(k)+'">'+esc(k)+"</button>"}).join("")+"</div>";
+  }).join("");
+  $$("#picker .chip").forEach(function(b){b.onclick=function(){var k=b.dataset.k;if(k in ssk)delete ssk[k];else ssk[k]=2;err("sk");drawPicker()}});
+  var ks=Object.keys(ssk);
+  $("#picked").innerHTML=ks.length?ks.map(function(k){return rowHtml(k,ssk[k],true)}).join(""):'<div class="empty">Selected skills appear here. Set a proficiency level for each.</div>';
+  bindRows($("#picked"),ssk,drawPicker);
+}
+$("#csa").onclick=function(){
+  var n=$("#csn").value.trim();err("csn");
+  if(!n){err("csn","Enter a skill name.");return}
+  n=n.charAt(0).toUpperCase()+n.slice(1);if(!CAT[n])CAT[n]=$("#csc").value;
+  ssk[n]=2;$("#csn").value="";err("sk");drawPicker();
+};
+$("#csn").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();$("#csa").click()}};
+$("#sf").onsubmit=function(e){
+  e.preventDefault();var ok=true,g=function(i){return $("#"+i).value.trim()};
+  ["nm","sem","spw","spw2","sk","tc"].forEach(function(i){err(i)});
+  function bad(i,m){err(i,m);ok=false}
+  if(g("nm").length<2)bad("nm","Enter your full name (minimum 2 characters).");
+  var em=g("sem").toLowerCase();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))bad("sem","Enter a valid email address, e.g. name@company.com.");
+  else if(users.some(function(u){return u.email===em}))bad("sem","An account with this email already exists. Sign in instead.");
+  var pw=$("#spw").value;
+  if(pw.length<8)bad("spw","Password must be at least 8 characters.");
+  else if(!/\d/.test(pw)||!/[A-Z]/.test(pw))bad("spw","Add at least one number and one capital letter.");
+  if($("#spw2").value!==pw)bad("spw2","Passwords do not match.");
+  if(!Object.keys(ssk).length)bad("sk","Select at least one skill.");
+  if(!$("#tc").checked)bad("tc","Consent is required to continue.");
+  if(!ok){var f=$(".err:not(:empty)");if(f)f.scrollIntoView({block:"center",behavior:"smooth"});return}
+  var nm=g("nm"),parts=nm.split(/\s+/),ini=(parts[0][0]+(parts[1]?parts[1][0]:parts[0][1]||"")).toUpperCase();
+  var tm={code:newCode(),name:parts[0]+"'s team"};teams.push(tm);
+  var u={n:nm,i:ini,c:PAL[users.length%PAL.length],team:tm.code,email:em,pw:pw,dept:"Not specified",hrs:12,bio:"",s:JSON.parse(JSON.stringify(ssk))};
+  users.push(u);saveAuth();enter(u);toast("Account created successfully.");
+  $("#sf").reset();ssk={};drawPicker();
+};
+
+/* shared skill row */
+function rowHtml(k,l,edit){
+  return '<div class="sk" data-k="'+esc(k)+'"><span class="name">'+esc(k)+'</span><div class="bar" title="Level '+l+' of 4"><b style="width:'+l*25+'%;background:'+LC[l]+'"></b></div>'+
+  (edit?'<div class="lvs">'+[1,2,3,4].map(function(n){return '<button type="button" data-l="'+n+'" title="'+LN[n]+'" aria-label="'+esc(k)+": "+LN[n]+'" aria-pressed="'+(l===n)+'" style="'+(l===n?"background:"+LC[n]:"")+'">'+LN[n].slice(0,3)+"</button>"}).join("")+'</div><button type="button" class="x" data-x="1" aria-label="Remove '+esc(k)+'">&times;</button>':'<span class="lvl" style="color:'+LC[l]+'">'+LN[l]+'</span><span></span>')+"</div>";
+}
+function bindRows(root,map,redraw){
+  $$("#"+root.id+" .sk").forEach(function(r){var k=r.dataset.k;
+    $$("#"+root.id+' [data-k="'+k.replace(/"/g,'\\"')+'"] .lvs button').forEach(function(b){b.onclick=function(){map[k]=+b.dataset.l;redraw()}});
+    var x=r.querySelector("[data-x]");if(x)x.onclick=function(){delete map[k];redraw()};
+  });
+}
+
+/* PROFILE */
+function render(){
+  var m=members(),t=teamOf(me);
+  $("#sub").textContent=m.length+(m.length===1?" member":" members")+" in "+t.name+". Select a member to view skills and availability.";
+  $("#tinfo").innerHTML='<div class="bio" style="margin:0 0 12px">Team code: <b class="mono">'+esc(t.code)+'</b><br><span class="dash" style="font-size:13px">Share this code so other members can join during sign-up.</span></div>';
+  $("#mems").innerHTML=m.map(function(p,i){return '<button class="mem" aria-pressed="'+(i===sel)+'" data-i="'+i+'">'+av(p)+"<span><b>"+esc(p.n)+(p===me?" (you)":"")+"</b><small>"+esc(p.dept)+'</small></span><span class="n">'+Object.keys(p.s).length+" skills</span></button>"}).join("");
+  $$(".mem").forEach(function(b){b.onclick=function(){sel=+b.dataset.i;render()}});
+  drawProf();
+}
+function drawProf(){
+  var p=members()[sel],ks=Object.keys(p.s),edit=(p===me);
+  var strong=ks.filter(function(k){return p.s[k]>=3}).length,top=ks.slice().sort(function(a,b){return p.s[b]-p.s[a]})[0];
+  var h='<div class="prof">'+av(p)+'<div><h2>'+esc(p.n)+'</h2><span class="dash">'+esc(p.dept)+'</span></div><div class="stat"><div><b>'+ks.length+'</b><small>Skills</small></div><div><b>'+strong+'</b><small>Strong / Expert</small></div><div><b>'+esc(top||"–")+'</b><small>Top skill</small></div></div></div>';
+  h+='<div class="det"><div><small>Email</small><b>'+esc(p.email)+'</b></div><div><small>Department</small><b>'+esc(p.dept)+'</b></div><div><small>Weekly availability</small><b>'+p.hrs+' hours</b></div></div>';
+  h+='<div class="bio">'+(p.bio?esc(p.bio):'<span class="dash">No bio yet.</span>')+"</div>";
+  h+='<div class="sect"><h4>Skills</h4>';
+  if(!ks.length)h+='<p class="dash">No skills yet.'+(edit?" Add the first one below.":"")+"</p>";
+  CATS.forEach(function(c){
+    var l=ks.filter(function(k){return CAT[k]===c}).sort(function(a,b){return p.s[b]-p.s[a]});
+    if(!l.length)return;
+    h+='<div class="grp">'+c+"</div>"+l.map(function(k){return rowHtml(k,p.s[k],edit)}).join("");
+  });
+  if(edit){
+    h+='<div class="picked" style="margin-top:22px;padding:16px"><b style="font-size:15px">Add a skill to '+(p===me?"your profile":esc(p.n.split(" ")[0])+"’s profile")+'</b><div class="custom" style="grid-template-columns:1.3fr 1fr auto"><div class="field"><label for="pn">Skill</label><input class="inp" id="pn" list="pl" placeholder="e.g. API design"><datalist id="pl">'+Object.keys(CAT).map(function(s){return '<option value="'+esc(s)+'">'}).join("")+'</datalist></div><div class="field"><label for="pc">Category</label><select class="inp" id="pc">'+CATS.map(function(c){return "<option>"+c+"</option>"}).join("")+'</select></div><button class="btn sm" id="pa" type="button">Add skill</button></div><div class="lb" style="margin-top:12px">Level</div><div class="lvs" id="plv" style="max-width:320px">'+[1,2,3,4].map(function(n){return '<button type="button" data-l="'+n+'" aria-pressed="'+(plvl===n)+'" style="'+(plvl===n?"background:"+LC[n]:"")+'">'+LN[n]+"</button>"}).join("")+'</div><div class="err" id="e_pn"></div></div>';
+    h+='<div class="field" style="margin-top:22px"><label for="pb">Bio</label><textarea class="inp" id="pb" maxlength="240">'+esc(p.bio)+'</textarea></div><div class="field"><label for="ph2">Weekly availability</label><div class="rng"><input id="ph2" type="range" min="2" max="40" value="'+p.hrs+'"><output id="ph2o">'+p.hrs+' h / week</output></div></div><button class="btn sm" id="psv" type="button">Save changes</button>';
+  }else h+='<p class="dash" style="margin-top:18px">Only '+esc(p.n.split(" ")[0])+" can edit this profile.</p>";
+  h+="</div>";
+  $("#prof").innerHTML='<h3>'+(p===me?"Your profile":esc(p.n))+'</h3><p class="hint">Skills are used to recommend task assignments.</p>'+h;
+  if(!edit)return;
+    $$("#prof .sk").forEach(function(row){var k=row.dataset.k;
+    $$('#prof .sk[data-k="'+k.replace(/"/g,'\\"')+'"] .lvs button').forEach(function(b){b.onclick=function(){p.s[k]=+b.dataset.l;render()}});
+    var x=row.querySelector("[data-x]");if(x)x.onclick=function(){delete p.s[k];toast("Removed "+k);render()};
+  });
+  $$("#plv button").forEach(function(b){b.onclick=function(){plvl=+b.dataset.l;$$("#plv button").forEach(function(x){var on=x===b;x.setAttribute("aria-pressed",on);x.style.background=on?LC[+x.dataset.l]:""})}});
+  $("#pn").oninput=function(){var c=CAT[this.value.trim()];if(c)$("#pc").value=c};
+  $("#pa").onclick=function(){
+    var n=$("#pn").value.trim();if(!n){err("pn","Enter a skill name.");return}
+    n=n.charAt(0).toUpperCase()+n.slice(1);if(!CAT[n])CAT[n]=$("#pc").value;
+    p.s[n]=plvl;toast("Added "+n);render();
+  };
+  $("#ph2").oninput=function(){$("#ph2o").textContent=this.value+" h / week"};
+  $("#psv").onclick=function(){p.bio=$("#pb").value.trim();p.hrs=+$("#ph2").value;toast("Profile updated");render()};
+}
+drawPicker();
+</script>
+</body>
+</html>
